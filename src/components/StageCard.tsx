@@ -24,9 +24,9 @@ export default function StageCard({ data }: StageCardProps) {
       )}
     >
       {/* Coluna Esquerda: Mascote & Visual */}
-      <div className={clsx("absolute inset-y-0 left-0 w-full lg:w-1/2 bg-gradient-to-br opacity-50", data.gradient)} />
+      <div className={clsx("absolute inset-y-0 left-0 w-full lg:w-1/2 bg-gradient-to-br opacity-50 transition-all duration-500", data.gradient, showDetails && "blur-sm opacity-30")} />
 
-      <div className="relative flex h-[35%] lg:h-full w-full lg:w-1/2 items-center justify-center p-8">
+      <div className={clsx("relative flex h-[35%] lg:h-full w-full lg:w-1/2 items-center justify-center p-8 transition-all duration-500", showDetails && "blur-sm scale-95 opacity-80")}>
         <motion.div
           animate={isCustomIntegral ? undefined : { y: [0, -15, 0] }}
           transition={isCustomIntegral ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -54,10 +54,10 @@ export default function StageCard({ data }: StageCardProps) {
             /* --- MODO RESUMO --- */
             <motion.div
               key="summary"
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="px-8 py-6 h-full flex flex-col justify-center lg:p-12 xl:p-16"
             >
               <div className="mb-6 flex items-center gap-3">
@@ -106,23 +106,23 @@ export default function StageCard({ data }: StageCardProps) {
             /* --- MODO DETALHES (Scroll Editorial) --- */
             <motion.div
               key="details"
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="h-full w-full flex flex-col bg-white overflow-hidden relative"
               // Impede que o scroll do texto afete o scroll horizontal da página
               onWheel={(e) => e.stopPropagation()}
             >
               <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none"/>
 
-              <div className="flex-1 overflow-y-auto px-8 py-8 lg:px-12 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
+              <div className="flex-1 overflow-y-auto max-h-[60vh] px-8 py-8 lg:px-12 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
                 <button 
                   onClick={() => setShowDetails(false)}
                   className="mb-6 inline-flex items-center text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors group/back sticky top-0 bg-white/90 backdrop-blur py-2 w-full z-20"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover/back:-translate-x-1" />
-                  Voltar ao resumo
+                  Voltar
                 </button>
 
                 <h4 className="text-sm uppercase tracking-widest font-bold text-slate-400 mb-2">
