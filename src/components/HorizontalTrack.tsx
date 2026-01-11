@@ -73,40 +73,29 @@ export default function HorizontalTrack() {
           </h2>
         </div>
 
-        {/* CORREÇÃO FINAL: w-max no pai, flex-none nos filhos, margens manuais */}
         <motion.div 
           ref={scrollRef} 
           style={{ x }} 
-          className="flex items-center w-max h-full px-8 md:px-24" // w-max obriga a largura total
+          className="flex flex-row flex-nowrap items-center w-fit h-full px-[10vw]"
         >
           {content.stages.map((stage) => (
-             // flex-none é a chave. Ele proíbe o navegador de mexer no tamanho.
-             <div key={stage.id} className="flex-none w-[85vw] md:w-[60vw] mr-12 md:mr-24 last:mr-0">
+             <div key={stage.id} className="flex-none w-[85vw] md:w-[650px] px-4 md:px-10">
                <StageCard data={stage} />
              </div>
           ))}
 
-          {/* CARD FINAL (AZUL) */}
-          <div className="flex-none w-[85vw] md:w-[60vw] h-[60vh] md:h-[70vh] flex flex-col items-center justify-center rounded-[3rem] bg-blue-600 p-8 text-center shadow-2xl shadow-blue-900/20 overflow-hidden relative">
-             
-             <div className="absolute inset-0 bg-blue-500 rounded-[3rem] opacity-20 transform rotate-3 scale-105 pointer-events-none"></div>
-
-             <motion.div 
-               initial={{ opacity: 0, y: 30 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               transition={{ delay: 0.2, duration: 0.6 }}
-               className="relative z-10 max-w-xl space-y-8"
-             >
-                <h3 className="text-4xl font-bold text-white md:text-6xl tracking-tight">
-                  O futuro começa <br/> no Tecla.
-                </h3>
-                <p className="text-lg text-blue-100 md:text-xl leading-relaxed">
-                  Venha conhecer nossa estrutura e proposta pedagógica de perto.
-                </p>
-                <button className="inline-flex items-center gap-3 rounded-full bg-white px-12 py-5 text-lg font-bold text-blue-600 transition-transform hover:scale-105 hover:bg-yellow-400 hover:text-blue-900 shadow-xl">
-                  Agendar Visita
-                </button>
-             </motion.div>
+          {/* Card Azul Final */}
+          <div className="flex-none w-[85vw] md:w-[650px] px-4 md:px-10">
+             <div className="h-[70vh] w-full rounded-[3rem] bg-blue-600 flex flex-col items-center justify-center p-8 text-center text-white shadow-2xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-blue-500 rounded-[3rem] opacity-20 transform rotate-3 scale-105 pointer-events-none"></div>
+                <div className="relative z-10 max-w-xl space-y-8">
+                  <h3 className="text-4xl font-bold md:text-5xl tracking-tight">O futuro começa <br/> no Tecla.</h3>
+                  <p className="text-lg text-blue-100 md:text-xl leading-relaxed">
+                    Venha conhecer nossa estrutura e proposta pedagógica de perto.
+                  </p>
+                  <button className="bg-white text-blue-600 px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform shadow-lg">Agendar Visita</button>
+                </div>
+             </div>
           </div>
         </motion.div>
 
