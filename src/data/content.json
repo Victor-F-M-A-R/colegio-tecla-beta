@@ -28,7 +28,7 @@
       "bullets": ["Alfabetização sólida", "Raciocínio lógico", "Autonomia"],
       "themeColor": "bg-blue-500",
       "gradient": "from-blue-50 to-white",
-      "mascot": "/assets/educacao_infantil.svg"
+      "mascot": "/assets/slide2.svg"
     },
     {
       "id": "finais",
@@ -40,7 +40,7 @@
       "bullets": ["Projetos e tecnologia", "Protagonismo", "Responsabilidade"],
       "themeColor": "bg-teal-500",
       "gradient": "from-teal-50 to-white",
-      "mascot": "/assets/anos_finais.svg"
+      "mascot": "/assets/slide3.svg"
     },
     {
       "id": "medio",
@@ -52,7 +52,7 @@
       "bullets": ["Pensamento crítico", "Cidadania", "Foco no vestibular"],
       "themeColor": "bg-indigo-600",
       "gradient": "from-indigo-50 to-white",
-      "mascot": "/assets/ensino_medio.svg"
+      "mascot": "/assets/slide4.svg"
     }
   ],
   "ctaFinal": {
