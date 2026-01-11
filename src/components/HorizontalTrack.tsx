@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import StageCard from './StageCard';
 import content from '@/data/content.json';
 
@@ -13,10 +13,18 @@ export default function HorizontalTrack() {
     target: targetRef,
   });
 
-  // Mapeia 0% a 100% do scroll vertical para mover os cards horizontalmente
+  // Adiciona física de mola (smooth scroll) ao progresso
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 150,
+    damping: 25,
+    mass: 0.5,
+    restDelta: 0.001
+  });
+
+  // Mapeia o progresso SUAVE para mover os cards horizontalmente
   // Ajuste "-75%" se sobrar ou faltar espaço no fim. 
   // Com 4 cards largos, precisamos mover bastante para a esquerda.
-  const x = useTransform(scrollYProgress, [0, 1], ["1%", "-75%"]);
+  const x = useTransform(smoothProgress, [0, 1], ["1%", "-75%"]);
 
   return (
     // Container "Fantasma" que dá a altura para o scroll acontecer (300vh = 3 telas de scroll)
@@ -42,9 +50,9 @@ export default function HorizontalTrack() {
           ))}
         </motion.div>
 
-        {/* Barra de Progresso Visual (Mapeada ao mesmo scroll) */}
+        {/* Barra de Progresso Visual (Mapeada ao mesmo scroll SUAVE) */}
         <motion.div 
-            style={{ scaleX: scrollYProgress }}
+            style={{ scaleX: smoothProgress }}
             className="absolute bottom-0 left-0 h-2 w-full bg-yellow-400 origin-left" 
         />
       </div>
