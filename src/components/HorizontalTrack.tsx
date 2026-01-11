@@ -73,21 +73,21 @@ export default function HorizontalTrack() {
           </h2>
         </div>
 
-        {/* O TRILHO (Motion Div) */}
+        {/* CORREÇÃO FINAL: w-max no pai, flex-none nos filhos, margens manuais */}
         <motion.div 
           ref={scrollRef} 
           style={{ x }} 
-          className="flex flex-row flex-nowrap gap-24 px-8 md:px-24 items-center min-w-max h-full"
+          className="flex items-center w-max h-full px-8 md:px-24" // w-max obriga a largura total
         >
           {content.stages.map((stage) => (
-             // Wrapper para garantir que o card não encolha
-             <div key={stage.id} className="relative flex-shrink-0 w-[90vw] md:w-[70vw]">
+             // flex-none é a chave. Ele proíbe o navegador de mexer no tamanho.
+             <div key={stage.id} className="flex-none w-[85vw] md:w-[60vw] mr-12 md:mr-24 last:mr-0">
                <StageCard data={stage} />
              </div>
           ))}
 
           {/* CARD FINAL (AZUL) */}
-          <div className="relative flex-shrink-0 w-[90vw] md:w-[70vw] h-[60vh] md:h-[70vh] flex flex-col items-center justify-center rounded-[3rem] bg-blue-600 p-8 text-center shadow-2xl shadow-blue-900/20 overflow-hidden">
+          <div className="flex-none w-[85vw] md:w-[60vw] h-[60vh] md:h-[70vh] flex flex-col items-center justify-center rounded-[3rem] bg-blue-600 p-8 text-center shadow-2xl shadow-blue-900/20 overflow-hidden relative">
              
              <div className="absolute inset-0 bg-blue-500 rounded-[3rem] opacity-20 transform rotate-3 scale-105 pointer-events-none"></div>
 
