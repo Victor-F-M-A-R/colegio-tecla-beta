@@ -77,7 +77,7 @@ export default function HorizontalTrack() {
         <motion.div 
           ref={scrollRef} 
           style={{ x }} 
-          className="inline-flex flex-row flex-nowrap items-center gap-8 md:gap-12 pl-6 md:pl-12 pr-[20vw] h-full"
+          className="inline-flex flex-row flex-nowrap items-center gap-8 md:gap-12 pl-6 md:pl-12 pr-6 md:pr-12 h-full"
         >
           {content.stages.map((stage) => (
              // O wrapper garante que o flex não aplique compressão
