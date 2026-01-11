@@ -73,29 +73,30 @@ export default function HorizontalTrack() {
           </h2>
         </div>
 
+        {/* TRILHO: Usando inline-flex para garantir uma linha única e rígida */}
         <motion.div 
           ref={scrollRef} 
           style={{ x }} 
-          className="flex flex-row flex-nowrap items-center w-fit h-full px-[10vw]"
+          className="inline-flex flex-row flex-nowrap items-center gap-20 pl-[10vw] pr-[20vw] h-full"
         >
           {content.stages.map((stage) => (
-             <div key={stage.id} className="flex-none w-[85vw] md:w-[650px] px-4 md:px-10">
+             // O wrapper garante que o flex não aplique compressão
+             <div key={stage.id} className="flex-none block"> 
                <StageCard data={stage} />
              </div>
           ))}
 
-          {/* Card Azul Final */}
-          <div className="flex-none w-[85vw] md:w-[650px] px-4 md:px-10">
-             <div className="h-[70vh] w-full rounded-[3rem] bg-blue-600 flex flex-col items-center justify-center p-8 text-center text-white shadow-2xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-blue-500 rounded-[3rem] opacity-20 transform rotate-3 scale-105 pointer-events-none"></div>
-                <div className="relative z-10 max-w-xl space-y-8">
-                  <h3 className="text-4xl font-bold md:text-5xl tracking-tight">O futuro começa <br/> no Tecla.</h3>
-                  <p className="text-lg text-blue-100 md:text-xl leading-relaxed">
-                    Venha conhecer nossa estrutura e proposta pedagógica de perto.
-                  </p>
-                  <button className="bg-white text-blue-600 px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform shadow-lg">Agendar Visita</button>
-                </div>
-             </div>
+          {/* CARD FINAL (AZUL) */}
+          <div className="flex-none block">
+            <div className="relative flex h-[75vh] min-w-[90vw] md:min-w-[70vw] flex-col items-center justify-center rounded-[2.5rem] bg-blue-600 p-12 text-center shadow-2xl shadow-blue-900/30 overflow-hidden">
+               {/* Conteúdo do Card Azul mantido */}
+               <motion.div className="relative z-10 space-y-8">
+                  <h3 className="text-5xl font-bold text-white md:text-6xl tracking-tight">O futuro começa aqui.</h3>
+                  <button className="rounded-full bg-white px-12 py-5 text-xl font-bold text-blue-600 hover:scale-105 transition-all">
+                    Matricule-se Já
+                  </button>
+               </motion.div>
+            </div>
           </div>
         </motion.div>
 
