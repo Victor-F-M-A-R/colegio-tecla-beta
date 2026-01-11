@@ -10,7 +10,7 @@ import IntegralMascot from './IntegralMascot';
 
 interface StageCardProps {
   data: StageData;
-  progress?: MotionValue<number>; // Optional for now, to be passed from parent
+  progress?: MotionValue<number>; 
 }
 
 export default function StageCard({ data, progress }: StageCardProps) {
@@ -18,22 +18,25 @@ export default function StageCard({ data, progress }: StageCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isCustomIntegral = data.mascot === "custom:integral";
 
-  // Parallax Effect (se progress existir)
-  // Como o card move da direita para esquerda, o parallax deve opor esse movimento ou acelerar
-  // Vamos fazer um movimento sutil no X
-  const parallaxX = useTransform(progress || new MotionValue(0), [0, 1], [50, -50]); 
+  // PARALLAX 3D: Mascote flutua em profundidade oposta ao scroll
+  const parallaxX = useTransform(progress || new MotionValue(0), [0, 1], [40, -40]);
 
-  // Magnetic Centering
+  // MAGNETIC FOCUS: Centralizar na COLUNA DE TEXTO (75% do card), não no centro geométrico (50%)
   useEffect(() => {
     if (showDetails && cardRef.current) {
-      // 1. Scroll básico para trazer à vista
+      // 1. Centralização bruta
       cardRef.current.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       
-      // 2. Ajuste fino para focar no conteúdo de texto (direita)
+      // 2. Ajuste fino para "Mira Magnética" no texto
       setTimeout(() => {
-         // Tentativa de centralizar melhor a coluna da direita se possível
-         // Em sticky scroll horizontal, o comportamento do browser pode variar.
-         // Este ajuste é "best effort".
+        // Tenta encontrar um container de scroll horizontal (se houver) ou usa window
+        // Nota: Em layouts com transform puro, isso pode requerer ajustes no pai.
+        // Aqui seguimos a instrução de tentar rolar o container.
+        const scroller = document.scrollingElement || document.documentElement;
+        if (cardRef.current) {
+            // Rola para a direita para trazer o texto (lado direito do card) para o centro da tela
+            scroller.scrollBy({ left: cardRef.current.offsetWidth * 0.25, behavior: 'smooth' });
+        }
       }, 300);
     }
   }, [showDetails]);
@@ -43,16 +46,43 @@ export default function StageCard({ data, progress }: StageCardProps) {
       ref={cardRef}
       className={clsx(
         "group relative flex h-[75vh] min-w-[90vw] flex-col overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white shadow-2xl shadow-slate-200/50 md:min-w-[75vw] lg:flex-row",
-        "transition-transform duration-700 hover:shadow-slate-300/50" // Aumentei duração para suavidade
+        "transition-transform duration-700 hover:shadow-slate-300/50"
       )}
     >
-      {/* Coluna Esquerda: Mascote & Visual */}
-      <div className={clsx("absolute inset-y-0 left-0 w-full lg:w-1/2 bg-gradient-to-br opacity-50 transition-all duration-700 ease-out", data.gradient, showDetails && "blur-md opacity-40")} />
+      {/* --- BOTÃO VOLTAR FLUTUANTE (Camada Superior) --- */}
+      <AnimatePresence>
+        {showDetails && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={(e) => { e.stopPropagation(); setShowDetails(false); }}
+            className="absolute top-6 left-6 z-50 p-3 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 text-slate-800 hover:bg-white/40 hover:scale-105 transition-all shadow-lg"
+            title="Voltar ao resumo"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
-      <div className={clsx("relative flex h-[35%] lg:h-full w-full lg:w-1/2 items-center justify-center p-8 transition-all duration-700 ease-out", showDetails && "blur-md scale-90 opacity-60")}>
+      {/* --- COLUNA ESQUERDA: MASCOTE (Com Efeitos de Foco) --- */}
+      <div 
+        className={clsx(
+            "absolute inset-y-0 left-0 w-full lg:w-1/2 bg-gradient-to-br transition-all duration-700 ease-out", 
+            data.gradient, 
+            showDetails ? "opacity-30" : "opacity-50"
+        )} 
+      />
+
+      <div className={clsx(
+          "relative flex h-[35%] lg:h-full w-full lg:w-1/2 items-center justify-center p-8 transition-all duration-700 ease-[0.22,1,0.36,1]", 
+          // EDITORIAL FOCUS: Blur, Scale Down, Grayscale e Slight Shift Left
+          showDetails && "blur-[8px] grayscale-[20%] scale-[0.85] -translate-x-[10%] opacity-60"
+        )}
+      >
         <motion.div
-           style={progress ? { x: parallaxX } : undefined} // Aplica Parallax se disponível
-           className="relative h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80 flex items-center justify-center"
+           style={progress ? { x: parallaxX } : undefined}
+           className="relative h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80 flex items-center justify-center transition-transform duration-700"
         >
           <motion.div
              animate={isCustomIntegral ? undefined : { y: [0, -15, 0] }}
@@ -74,18 +104,18 @@ export default function StageCard({ data, progress }: StageCardProps) {
         </motion.div>
       </div>
 
-      {/* Coluna Direita: Animação de Conteúdo */}
+      {/* --- COLUNA DIREITA: CONTEÚDO EDITORIAL --- */}
       <div className="relative flex flex-1 w-full lg:w-1/2 flex-col justify-center bg-white/80 backdrop-blur-sm lg:bg-transparent overflow-hidden">
         
         <AnimatePresence mode="wait">
           {!showDetails ? (
-            /* --- MODO RESUMO --- */
+            /* === MODO RESUMO === */
             <motion.div
               key="summary"
               initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }} // Curva "Editorial"
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="px-8 py-6 h-full flex flex-col justify-center lg:p-12 xl:p-16"
             >
               <div className="mb-6 flex items-center gap-3">
@@ -131,36 +161,23 @@ export default function StageCard({ data, progress }: StageCardProps) {
             </motion.div>
 
           ) : (
-            /* --- MODO DETALHES (Scroll Editorial) --- */
+            /* === MODO DETALHES (Scroll Editorial) === */
             <motion.div
               key="details"
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 40 }}
-              transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="h-full w-full flex flex-col bg-white overflow-hidden relative"
-              // Impede que o scroll do texto afete o scroll horizontal da página
               onWheel={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
             >
-              {/* Botão Flutuante de Elite */}
-              <button 
-                onClick={() => setShowDetails(false)}
-                className="absolute top-6 left-6 z-50 p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-slate-600 hover:bg-white/60 hover:scale-105 hover:shadow-lg transition-all group/back shadow-sm"
-                title="Voltar ao resumo"
-              >
-                <ArrowLeft className="h-5 w-5 transition-transform group-hover/back:-translate-x-1" />
-              </button>
+              {/* Máscara de Leitura (Top Gradient) */}
+              <div className="sticky top-0 h-20 bg-gradient-to-b from-white via-white/80 to-transparent pointer-events-none z-10 w-full" />
 
-              {/* Gradient Overlay Topo (Sticky Visual) */}
-              <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white via-white/90 to-transparent z-40 pointer-events-none"/>
-
-              <div className="flex-1 overflow-y-auto max-h-[75vh] px-8 lg:px-12 pb-8 pt-3 scrollbar-thin scrollbar-track-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
+              <div className="flex-1 overflow-y-auto max-h-[60vh] px-8 lg:px-12 pb-8 -mt-20 pt-20 scrollbar-thin scrollbar-track-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
                 
-                {/* Espaçador para o botão flutuante e gradiente */}
-                <div className="h-24 w-full" />
-
-                <h4 className="text-sm uppercase tracking-widest font-bold text-slate-400 mb-2 pt-4">
+                <h4 className="text-sm uppercase tracking-widest font-bold text-slate-400 mb-2">
                   {data.title} — Detalhes
                 </h4>
 
@@ -196,7 +213,6 @@ export default function StageCard({ data, progress }: StageCardProps) {
                 <div className="h-12 w-full" /> {/* Spacer Final */}
               </div>
               
-              {/* Gradient Overlay Fundo */}
               <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none"/>
             </motion.div>
           )}
