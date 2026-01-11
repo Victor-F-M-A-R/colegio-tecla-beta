@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, ArrowRight, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
@@ -14,10 +14,19 @@ interface StageCardProps {
 
 export default function StageCard({ data }: StageCardProps) {
   const [showDetails, setShowDetails] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const isCustomIntegral = data.mascot === "custom:integral";
+
+  // Auto-centering effect
+  useEffect(() => {
+    if (showDetails && cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }, [showDetails]);
 
   return (
     <motion.div 
+      ref={cardRef}
       className={clsx(
         "group relative flex h-[75vh] min-w-[90vw] flex-col overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white shadow-2xl shadow-slate-200/50 md:min-w-[75vw] lg:flex-row",
         "transition-transform duration-500 hover:scale-[1.01]"
@@ -26,7 +35,7 @@ export default function StageCard({ data }: StageCardProps) {
       {/* Coluna Esquerda: Mascote & Visual */}
       <div className={clsx("absolute inset-y-0 left-0 w-full lg:w-1/2 bg-gradient-to-br opacity-50 transition-all duration-500", data.gradient, showDetails && "blur-sm opacity-30")} />
 
-      <div className={clsx("relative flex h-[35%] lg:h-full w-full lg:w-1/2 items-center justify-center p-8 transition-all duration-500", showDetails && "blur-sm scale-95 opacity-80")}>
+      <div className={clsx("relative flex h-[35%] lg:h-full w-full lg:w-1/2 items-center justify-center p-8 transition-all duration-500", showDetails && "blur-[4px] scale-90 opacity-60")}>
         <motion.div
           animate={isCustomIntegral ? undefined : { y: [0, -15, 0] }}
           transition={isCustomIntegral ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -114,16 +123,22 @@ export default function StageCard({ data }: StageCardProps) {
               // Impede que o scroll do texto afete o scroll horizontal da página
               onWheel={(e) => e.stopPropagation()}
             >
-              <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none"/>
+              {/* Botão Flutuante (Glassmorphism) */}
+              <button 
+                onClick={() => setShowDetails(false)}
+                className="absolute top-4 left-6 z-50 p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-slate-600 hover:bg-white/60 hover:scale-105 hover:shadow-lg transition-all group/back"
+                title="Voltar ao resumo"
+              >
+                <ArrowLeft className="h-5 w-5 transition-transform group-hover/back:-translate-x-1" />
+              </button>
 
-              <div className="flex-1 overflow-y-auto max-h-[60vh] px-8 py-8 lg:px-12 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
-                <button 
-                  onClick={() => setShowDetails(false)}
-                  className="mb-6 inline-flex items-center text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors group/back sticky top-0 bg-white/90 backdrop-blur py-2 w-full z-20"
-                >
-                  <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover/back:-translate-x-1" />
-                  Voltar
-                </button>
+              {/* Gradient Overlay Topo */}
+              <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white via-white/80 to-transparent z-40 pointer-events-none"/>
+
+              <div className="flex-1 overflow-y-auto max-h-[75vh] px-8 lg:px-12 pb-8 pt-3 scrollbar-thin scrollbar-track-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
+                
+                {/* Espaçador para o botão flutuante */}
+                <div className="h-16 w-full" />
 
                 <h4 className="text-sm uppercase tracking-widest font-bold text-slate-400 mb-2">
                   {data.title} — Detalhes
