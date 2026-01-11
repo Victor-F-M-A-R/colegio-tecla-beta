@@ -17,7 +17,7 @@ export default function StageCard({ data }: StageCardProps) {
   return (
     <motion.div 
       className={clsx(
-        "group relative flex h-full w-[90vw] flex-col overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white shadow-2xl shadow-slate-200/50 md:w-[80vw] lg:flex-row",
+        "group relative flex h-[75vh] min-w-[90vw] flex-col overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white shadow-2xl shadow-slate-200/50 md:min-w-[75vw] lg:flex-row",
         "transition-transform duration-500 hover:scale-[1.01]"
       )}
     >
