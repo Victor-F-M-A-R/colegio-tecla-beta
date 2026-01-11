@@ -1,0 +1,64 @@
+{
+  "hero": {
+    "title": "Ensino que acompanha cada fase",
+    "subtitle": "Da Educação Infantil ao Ensino Médio, com rotina, acolhimento e desenvolvimento integral.",
+    "ctaPrimary": "Agendar visita",
+    "ctaSecondary": "Ver segmentos"
+  },
+  "stages": [
+    {
+      "id": "infantil",
+      "title": "Educação Infantil",
+      "age": "2 a 5 anos",
+      "period": "Manhã / Tarde",
+      "subtitle": "Acolhimento, ludicidade e as bases da aprendizagem.",
+      "description": "Nesta fase, a criança precisa de acolhimento afetivo, atividades lúdicas e um ambiente que incentive a interação. O letramento se inicia aqui.",
+      "bullets": ["Rotina segura", "Psicomotricidade", "Aprender brincando"],
+      "themeColor": "bg-yellow-400",
+      "gradient": "from-yellow-50 to-white",
+      "mascot": "/assets/infantil.svg"
+    },
+    {
+      "id": "iniciais",
+      "title": "Anos Iniciais",
+      "age": "1º ao 5º ano",
+      "period": "Manhã / Tarde",
+      "subtitle": "Alfabetização, raciocínio e construção de autonomia.",
+      "description": "Consolida-se a escrita, a leitura e o cálculo. O foco é desenvolver capacidades intelectuais e pensamento autônomo.",
+      "bullets": ["Alfabetização sólida", "Raciocínio lógico", "Autonomia"],
+      "themeColor": "bg-blue-500",
+      "gradient": "from-blue-50 to-white",
+      "mascot": "/assets/educacao_infantil.svg"
+    },
+    {
+      "id": "finais",
+      "title": "Anos Finais",
+      "age": "6º ao 9º ano",
+      "period": "Manhã",
+      "subtitle": "Autonomia, projetos e ampliação de repertório.",
+      "description": "O aluno desenvolve autonomia por meio de projetos e novas tecnologias, formulando ideias que se traduzem em ações.",
+      "bullets": ["Projetos e tecnologia", "Protagonismo", "Responsabilidade"],
+      "themeColor": "bg-teal-500",
+      "gradient": "from-teal-50 to-white",
+      "mascot": "/assets/anos_finais.svg"
+    },
+    {
+      "id": "medio",
+      "title": "Ensino Médio",
+      "age": "1ª à 3ª série",
+      "period": "Manhã",
+      "subtitle": "Pesquisa, argumentação e formação humanista.",
+      "description": "Estimula-se a pesquisa e o pensamento crítico sobre questões da atualidade, consolidando a preparação para o futuro.",
+      "bullets": ["Pensamento crítico", "Cidadania", "Foco no vestibular"],
+      "themeColor": "bg-indigo-600",
+      "gradient": "from-indigo-50 to-white",
+      "mascot": "/assets/ensino_medio.svg"
+    }
+  ],
+  "ctaFinal": {
+    "title": "Venha conhecer o Colégio Tecla",
+    "text": "Agende uma visita e converse com a equipe pedagógica.",
+    "buttonPrimary": "Agendar Visita",
+    "buttonSecondary": "WhatsApp"
+  }
+}
