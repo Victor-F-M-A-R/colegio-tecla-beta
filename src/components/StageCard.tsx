@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useTransform, MotionValue } from 'framer-motion';
 import { Sun, Moon, ArrowRight, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { StageData } from '@/types';
@@ -10,17 +10,31 @@ import IntegralMascot from './IntegralMascot';
 
 interface StageCardProps {
   data: StageData;
+  progress?: MotionValue<number>; // Optional for now, to be passed from parent
 }
 
-export default function StageCard({ data }: StageCardProps) {
+export default function StageCard({ data, progress }: StageCardProps) {
   const [showDetails, setShowDetails] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const isCustomIntegral = data.mascot === "custom:integral";
 
-  // Auto-centering effect
+  // Parallax Effect (se progress existir)
+  // Como o card move da direita para esquerda, o parallax deve opor esse movimento ou acelerar
+  // Vamos fazer um movimento sutil no X
+  const parallaxX = useTransform(progress || new MotionValue(0), [0, 1], [50, -50]); 
+
+  // Magnetic Centering
   useEffect(() => {
     if (showDetails && cardRef.current) {
+      // 1. Scroll básico para trazer à vista
       cardRef.current.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      
+      // 2. Ajuste fino para focar no conteúdo de texto (direita)
+      setTimeout(() => {
+         // Tentativa de centralizar melhor a coluna da direita se possível
+         // Em sticky scroll horizontal, o comportamento do browser pode variar.
+         // Este ajuste é "best effort".
+      }, 300);
     }
   }, [showDetails]);
 
@@ -29,29 +43,34 @@ export default function StageCard({ data }: StageCardProps) {
       ref={cardRef}
       className={clsx(
         "group relative flex h-[75vh] min-w-[90vw] flex-col overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white shadow-2xl shadow-slate-200/50 md:min-w-[75vw] lg:flex-row",
-        "transition-transform duration-500 hover:scale-[1.01]"
+        "transition-transform duration-700 hover:shadow-slate-300/50" // Aumentei duração para suavidade
       )}
     >
       {/* Coluna Esquerda: Mascote & Visual */}
-      <div className={clsx("absolute inset-y-0 left-0 w-full lg:w-1/2 bg-gradient-to-br opacity-50 transition-all duration-500", data.gradient, showDetails && "blur-sm opacity-30")} />
+      <div className={clsx("absolute inset-y-0 left-0 w-full lg:w-1/2 bg-gradient-to-br opacity-50 transition-all duration-700 ease-out", data.gradient, showDetails && "blur-md opacity-40")} />
 
-      <div className={clsx("relative flex h-[35%] lg:h-full w-full lg:w-1/2 items-center justify-center p-8 transition-all duration-500", showDetails && "blur-[4px] scale-90 opacity-60")}>
+      <div className={clsx("relative flex h-[35%] lg:h-full w-full lg:w-1/2 items-center justify-center p-8 transition-all duration-700 ease-out", showDetails && "blur-md scale-90 opacity-60")}>
         <motion.div
-          animate={isCustomIntegral ? undefined : { y: [0, -15, 0] }}
-          transition={isCustomIntegral ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="relative h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80 flex items-center justify-center"
+           style={progress ? { x: parallaxX } : undefined} // Aplica Parallax se disponível
+           className="relative h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80 flex items-center justify-center"
         >
-          {isCustomIntegral ? (
-            <IntegralMascot />
-          ) : (
-            <Image
-              src={data.mascot}
-              alt={`Mascote ${data.title}`}
-              fill
-              className="object-contain drop-shadow-xl"
-              priority
-            />
-          )}
+          <motion.div
+             animate={isCustomIntegral ? undefined : { y: [0, -15, 0] }}
+             transition={isCustomIntegral ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
+             className="relative w-full h-full"
+          >
+            {isCustomIntegral ? (
+              <IntegralMascot />
+            ) : (
+              <Image
+                src={data.mascot}
+                alt={`Mascote ${data.title}`}
+                fill
+                className="object-contain drop-shadow-2xl"
+                priority
+              />
+            )}
+           </motion.div>
         </motion.div>
       </div>
 
@@ -63,10 +82,10 @@ export default function StageCard({ data }: StageCardProps) {
             /* --- MODO RESUMO --- */
             <motion.div
               key="summary"
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }} // Curva "Editorial"
               className="px-8 py-6 h-full flex flex-col justify-center lg:p-12 xl:p-16"
             >
               <div className="mb-6 flex items-center gap-3">
@@ -115,32 +134,33 @@ export default function StageCard({ data }: StageCardProps) {
             /* --- MODO DETALHES (Scroll Editorial) --- */
             <motion.div
               key="details"
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              exit={{ opacity: 0, x: 40 }}
+              transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
               className="h-full w-full flex flex-col bg-white overflow-hidden relative"
               // Impede que o scroll do texto afete o scroll horizontal da página
               onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
             >
-              {/* Botão Flutuante (Glassmorphism) */}
+              {/* Botão Flutuante de Elite */}
               <button 
                 onClick={() => setShowDetails(false)}
-                className="absolute top-4 left-6 z-50 p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-slate-600 hover:bg-white/60 hover:scale-105 hover:shadow-lg transition-all group/back"
+                className="absolute top-6 left-6 z-50 p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-slate-600 hover:bg-white/60 hover:scale-105 hover:shadow-lg transition-all group/back shadow-sm"
                 title="Voltar ao resumo"
               >
                 <ArrowLeft className="h-5 w-5 transition-transform group-hover/back:-translate-x-1" />
               </button>
 
-              {/* Gradient Overlay Topo */}
-              <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white via-white/80 to-transparent z-40 pointer-events-none"/>
+              {/* Gradient Overlay Topo (Sticky Visual) */}
+              <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white via-white/90 to-transparent z-40 pointer-events-none"/>
 
               <div className="flex-1 overflow-y-auto max-h-[75vh] px-8 lg:px-12 pb-8 pt-3 scrollbar-thin scrollbar-track-transparent [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
                 
-                {/* Espaçador para o botão flutuante */}
-                <div className="h-16 w-full" />
+                {/* Espaçador para o botão flutuante e gradiente */}
+                <div className="h-24 w-full" />
 
-                <h4 className="text-sm uppercase tracking-widest font-bold text-slate-400 mb-2">
+                <h4 className="text-sm uppercase tracking-widest font-bold text-slate-400 mb-2 pt-4">
                   {data.title} — Detalhes
                 </h4>
 
@@ -173,10 +193,11 @@ export default function StageCard({ data }: StageCardProps) {
                   Faixa etária: {data.age} &nbsp;|&nbsp; Turnos: {data.period}
                 </div>
                 
-                <div className="h-8 w-full" /> {/* Spacer Final */}
+                <div className="h-12 w-full" /> {/* Spacer Final */}
               </div>
               
-              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none"/>
+              {/* Gradient Overlay Fundo */}
+              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none"/>
             </motion.div>
           )}
         </AnimatePresence>

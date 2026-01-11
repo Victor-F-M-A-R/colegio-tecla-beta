@@ -80,7 +80,7 @@ export default function HorizontalTrack() {
 
           {content.stages.map((stage) => (
              <div key={stage.id} className="flex-none block"> 
-               <StageCard data={stage} />
+               <StageCard data={stage} progress={smoothProgress} />
              </div>
           ))}
 
