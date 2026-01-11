@@ -16,6 +16,11 @@ export interface StageData {
   themeColor: string;
   gradient: string;
   mascot: string;
+  fullContent?: {
+    intro: string;
+    text: string;
+    detailedBullets: string[];
+  };
 }
 
 export interface CtaFinalData {

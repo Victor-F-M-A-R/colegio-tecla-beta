@@ -12,11 +12,21 @@
       "age": "2 a 5 anos",
       "period": "Manhã / Tarde",
       "subtitle": "Acolhimento, ludicidade e as bases da aprendizagem.",
-      "description": "Nesta fase, a criança precisa de acolhimento afetivo, atividades lúdicas e um ambiente que incentive a interação. O letramento se inicia aqui.",
+      "description": "Nesta fase, a criança precisa de acolhimento afetivo, atividades lúdicas e um ambiente que incentive a interação.",
       "bullets": ["Rotina segura", "Psicomotricidade", "Aprender brincando"],
       "themeColor": "bg-yellow-400",
       "gradient": "from-yellow-50 to-white",
-      "mascot": "/assets/infantil.svg"
+      "mascot": "/assets/infantil.svg",
+      "fullContent": {
+        "intro": "Como a Educação Infantil é vivenciada no Colégio Tecla",
+        "text": "Nesta etapa, a criança necessita de um ambiente de acolhimento afetivo, estruturado por atividades lúdicas e experiências que favoreçam a interação e o brincar, elementos fundamentais para a construção do conhecimento e o desenvolvimento pleno de suas potencialidades.\n\nO processo de letramento tem início na Educação Infantil, por meio do estímulo à psicomotricidade, aos movimentos e aos sentidos, promovendo a ampliação da consciência da criança sobre o contexto escolar em que está inserida.",
+        "detailedBullets": [
+          "Desenvolvimento socioemocional e afetivo",
+          "Psicomotricidade e coordenação motora",
+          "Linguagem oral e expressão",
+          "Autonomia e convivência"
+        ]
+      }
     },
     {
       "id": "iniciais",
@@ -28,19 +38,39 @@
       "bullets": ["Alfabetização sólida", "Raciocínio lógico", "Autonomia"],
       "themeColor": "bg-blue-500",
       "gradient": "from-blue-50 to-white",
-      "mascot": "/assets/slide2.svg"
+      "mascot": "/assets/educacao_infantil.svg",
+      "fullContent": {
+        "intro": "Como os Anos Iniciais são desenvolvidos no Colégio Tecla",
+        "text": "Ao ingressarem no 1º ano, as atividades e disciplinas são planejadas para promover o desenvolvimento do pensamento espacial e da linguagem oral e escrita. Consolida-se, de forma progressiva, a escrita, a leitura e o cálculo, aprendizagens fundamentais para a ampliação da expressão e do raciocínio lógico.\n\nNesse período, busca-se desenvolver as capacidades intelectuais do aluno, estimulando o pensamento autônomo, a construção de sua própria identidade e o fortalecimento da consciência crítica.",
+        "detailedBullets": [
+          "Alfabetização e consolidação da leitura e escrita",
+          "Raciocínio lógico e pensamento matemático",
+          "Autonomia intelectual e organização dos estudos",
+          "Identidade, convivência e participação social"
+        ]
+      }
     },
     {
       "id": "finais",
       "title": "Anos Finais",
       "age": "6º ao 9º ano",
-      "period": "Manhã",
+      "period": "Manhã / Tarde",
       "subtitle": "Autonomia, projetos e ampliação de repertório.",
       "description": "O aluno desenvolve autonomia por meio de projetos e novas tecnologias, formulando ideias que se traduzem em ações.",
       "bullets": ["Projetos e tecnologia", "Protagonismo", "Responsabilidade"],
       "themeColor": "bg-teal-500",
       "gradient": "from-teal-50 to-white",
-      "mascot": "/assets/slide3.svg"
+      "mascot": "/assets/anos_finais.svg",
+      "fullContent": {
+        "intro": "A construção da autonomia e do pensamento crítico nos Anos Finais",
+        "text": "Nos Anos Finais do Ensino Fundamental, o aluno amplia sua autonomia por meio da aquisição de novos conhecimentos, exercitando-se em projetos de trabalho, no uso de novas tecnologias e em atividades de estudo do meio.\n\nO estudante é incentivado a observar, registrar, opinar e formular ideias, transformando o conhecimento em ações concretas. Essas experiências favorecem a compreensão de que o aprendizado é um processo contínuo.",
+        "detailedBullets": [
+          "Autonomia intelectual e responsabilidade acadêmica",
+          "Pensamento crítico e argumentação",
+          "Uso consciente de tecnologias educacionais",
+          "Trabalho em projetos e pesquisa orientada"
+        ]
+      }
     },
     {
       "id": "medio",
@@ -52,7 +82,39 @@
       "bullets": ["Pensamento crítico", "Cidadania", "Foco no vestibular"],
       "themeColor": "bg-indigo-600",
       "gradient": "from-indigo-50 to-white",
-      "mascot": "/assets/slide4.svg"
+      "mascot": "/assets/ensino_medio.svg",
+      "fullContent": {
+        "intro": "Formação acadêmica, cultural e humanista no Ensino Médio",
+        "text": "No Ensino Médio, é fundamental estimular a pesquisa, a capacidade de argumentação e o pensamento crítico sobre as questões da atualidade, promovendo o respeito à pluralidade, à diversidade e ao meio ambiente.\n\nA proposta pedagógica busca consolidar a formação cultural e humanista iniciada nas etapas anteriores, incentivando o aluno a interpretar e posicionar-se diante dos desafios contemporâneos.",
+        "detailedBullets": [
+          "Pesquisa, análise e argumentação",
+          "Pensamento crítico e consciência social",
+          "Formação cultural e ética",
+          "Preparação para escolhas acadêmicas e profissionais"
+        ]
+      }
+    },
+    {
+      "id": "integral",
+      "title": "Período Integral",
+      "age": "Conforme segmento",
+      "period": "Integral",
+      "subtitle": "Esporte, cultura e acompanhamento pedagógico.",
+      "description": "Uma extensão da escola com atividades dirigidas, alimentação balanceada e muito acolhimento.",
+      "bullets": ["Apoio pedagógico", "Recreação", "Alimentação"],
+      "themeColor": "bg-orange-400",
+      "gradient": "from-orange-50 to-white",
+      "mascot": "custom:integral",
+      "fullContent": {
+        "intro": "A proposta do Período Integral no Colégio Tecla",
+        "text": "Os alunos frequentam as aulas no período regular e, no período contrário, participam de atividades de recreação, alimentação e auxílio pedagógico, ampliando sua permanência no ambiente escolar de forma equilibrada.\n\nEssa organização favorece uma maior interação entre os alunos, contribui para o acompanhamento pedagógico contínuo e oferece condições mais adequadas para o desenvolvimento social e emocional.",
+        "detailedBullets": [
+          "Apoio pedagógico e acompanhamento escolar",
+          "Atividades recreativas e de convivência",
+          "Rotina estruturada com alimentação",
+          "Desenvolvimento social e emocional"
+        ]
+      }
     }
   ],
   "ctaFinal": {
