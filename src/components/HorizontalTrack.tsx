@@ -77,9 +77,10 @@ export default function HorizontalTrack() {
         <motion.div 
           ref={scrollRef} 
           style={{ x }} 
-          className="flex gap-12 px-8 md:px-24 items-center w-max h-full"
+          className="flex flex-row flex-nowrap gap-24 px-8 md:px-24 items-center min-w-max h-full"
         >
           {content.stages.map((stage) => (
+             // Wrapper para garantir que o card não encolha
              <div key={stage.id} className="relative flex-shrink-0 w-[90vw] md:w-[70vw]">
                <StageCard data={stage} />
              </div>
