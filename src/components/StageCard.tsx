@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Sun, Moon, ArrowRight } from 'lucide-react';
+import { Sun, Moon, ArrowRight, Apple, Dumbbell, Palette, BookOpen } from 'lucide-react';
 import Image from 'next/image';
 import { StageData } from '@/types';
 import clsx from 'clsx';
@@ -11,6 +11,8 @@ interface StageCardProps {
 }
 
 export default function StageCard({ data }: StageCardProps) {
+  const isCustomIntegral = data.mascot === "custom:integral";
+
   return (
     <motion.div 
       className={clsx(
@@ -24,17 +26,63 @@ export default function StageCard({ data }: StageCardProps) {
       {/* Left Column: Mascot & Visuals */}
       <div className="relative flex h-[40%] items-center justify-center p-8 lg:h-full lg:w-1/2">
         <motion.div
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          animate={isCustomIntegral ? undefined : { y: [0, -15, 0] }}
+          transition={isCustomIntegral ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
           className="relative h-48 w-48 md:h-64 md:w-64 lg:h-80 lg:w-80"
         >
-           <Image
-            src={data.mascot}
-            alt={`Mascote ${data.title}`}
-            fill
-            className="object-contain"
-            priority
-          />
+          {isCustomIntegral ? (
+            // Visual "Universo Integral"
+            <div className="relative flex h-full w-full items-center justify-center">
+              {/* Círculo Central */}
+              <div className="absolute h-32 w-32 rounded-full bg-yellow-200/50 backdrop-blur-sm md:h-48 md:w-48 lg:h-56 lg:w-56" />
+              
+              {/* Elementos Flutuantes */}
+              {/* Apple - Top Right */}
+              <motion.div
+                animate={{ y: [0, -12, 0], rotate: [0, 5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0 }}
+                className="absolute -right-2 top-0 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg md:h-20 md:w-20"
+              >
+                <Apple className="h-8 w-8 text-red-500 md:h-10 md:w-10" />
+              </motion.div>
+
+              {/* Dumbbell - Bottom Left */}
+              <motion.div
+                animate={{ y: [0, -15, 0], rotate: [0, -5, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute -left-4 bottom-8 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg md:h-18 md:w-18"
+              >
+                <Dumbbell className="h-7 w-7 text-blue-500 md:h-9 md:w-9" />
+              </motion.div>
+
+              {/* Palette - Top Left */}
+              <motion.div
+                animate={{ y: [0, -10, 0], rotate: [0, 8, 0] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="absolute left-0 top-4 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg md:h-16 md:w-16"
+              >
+                <Palette className="h-6 w-6 text-purple-500 md:h-8 md:w-8" />
+              </motion.div>
+              
+              {/* Book - Bottom Right */}
+               <motion.div
+                animate={{ y: [0, -8, 0], rotate: [0, -3, 0] }}
+                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                className="absolute right-4 bottom-4 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg md:h-18 md:w-18"
+              >
+                <BookOpen className="h-7 w-7 text-emerald-500 md:h-9 md:w-9" />
+              </motion.div>
+            </div>
+          ) : (
+            // Mascote SVG Padrão
+            <Image
+              src={data.mascot}
+              alt={`Mascote ${data.title}`}
+              fill
+              className="object-contain"
+              priority
+            />
+          )}
         </motion.div>
       </div>
 
@@ -68,7 +116,7 @@ export default function StageCard({ data }: StageCardProps) {
           {/* Period info */}
           <div className="flex items-center gap-2 text-slate-500">
              {data.period.includes('Manhã') && <Sun className="h-5 w-5 text-amber-500" />}
-             {data.period.includes('Tarde') && <Moon className="h-5 w-5 text-indigo-500" />}
+             {(data.period.includes('Tarde') || data.period.includes('Contraturno')) && <Moon className="h-5 w-5 text-indigo-500" />}
              <span className="text-sm font-medium">{data.period}</span>
           </div>
 
