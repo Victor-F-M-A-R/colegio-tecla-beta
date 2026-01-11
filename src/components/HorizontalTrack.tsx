@@ -22,18 +22,19 @@ export default function HorizontalTrack() {
   });
 
   // Mapeia o progresso SUAVE para mover os cards horizontalmente
-  // Ajuste "-75%" se sobrar ou faltar espaço no fim. 
-  // Com 4 cards largos, precisamos mover bastante para a esquerda.
-  const x = useTransform(smoothProgress, [0, 1], ["1%", "-75%"]);
+  // Ajustado para -81% para garantir que todos os 5 cards apareçam completamente
+  // O cálculo ideal é: -(100 - (100 / num_cards))% aprox,
+  // Mas como há gaps e padding, ajustamos empiricamente.
+  const x = useTransform(smoothProgress, [0, 1], ["1%", "-81%"]);
 
   return (
-    // Container "Fantasma" que dá a altura para o scroll acontecer (300vh = 3 telas de scroll)
-    <section ref={targetRef} className="relative h-[300vh] bg-slate-50">
+    // Aumentado para 400vh para dar mais tempo de scroll dado que agora temos 5 cards
+    <section ref={targetRef} className="relative h-[400vh] bg-slate-50">
       
       {/* Container "Grudado" na tela */}
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         
-        {/* Título Fixo (Opcional, dá contexto) e Hidden no mobile se quiser */}
+        {/* Título Fixo */}
         <div className="absolute top-8 left-8 z-10 md:top-12 md:left-12">
           <h2 className="text-xl font-bold text-slate-400 uppercase tracking-widest hidden md:block">
             A Jornada
@@ -43,21 +44,20 @@ export default function HorizontalTrack() {
         {/* O Trem Horizontal */}
         <motion.div style={{ x }} className="flex gap-8 px-8 md:px-20 items-center">
           {content.stages.map((stage) => (
-            // Flex-shrink-0 garante que os cards não encolham
-            <div key={stage.id} className="shrink-0">
+            <div key={stage.id} className="shrink-0 last:mr-20">
                <StageCard data={stage} />
             </div>
           ))}
         </motion.div>
 
-        {/* Barra de Progresso Visual (Mapeada ao mesmo scroll SUAVE) */}
+        {/* Barra de Progresso Visual */}
         <motion.div 
             style={{ scaleX: smoothProgress }}
             className="absolute bottom-0 left-0 h-2 w-full bg-yellow-400 origin-left" 
         />
       </div>
       
-      {/* Mobile Hint (Opcional, para indicar que é só descer) */}
+      {/* Mobile Hint */}
       <div className="absolute bottom-10 w-full text-center text-slate-400 text-sm md:hidden pointer-events-none">
         Continue descendo para explorar
       </div>
